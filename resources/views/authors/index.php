@@ -8,7 +8,7 @@ ob_start();
 <div class="grid">
     <?php foreach ($authors as $author): ?>
         <div class="card">
-            <h3><a href="/authors/<?php echo $author['id']; ?>"><?php echo htmlspecialchars($author['author']); ?></a></h3>
+            <h3><?php echo htmlspecialchars($author['author']); ?></h3>
             <p><strong>Nacionalidad:</strong> <?php echo htmlspecialchars($author['nationality']); ?></p>
             <p><strong>Año Nacimiento:</strong> <?php echo htmlspecialchars($author['birth_year']); ?></p>
             <p><strong>Campos:</strong> <?php echo htmlspecialchars($author['fields']); ?></p>
