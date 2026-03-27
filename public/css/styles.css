@@ -25,6 +25,12 @@ nav a {
     margin-right: 10px;
 }
 
+nav a.active {
+    background-color: #0087be;
+    color: #fff;
+    border-color: #0087be;
+}
+
 .content {
     background-color: #fff;
     padding: 30px;

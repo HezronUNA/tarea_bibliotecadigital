@@ -12,10 +12,24 @@
         <header>
             <h1>Biblioteca Digital</h1>
             <nav>
-                <a href="/" class="button button-primary">Inicio</a>
-                <a href="/books" class="button">Libros</a>
-                <a href="/authors" class="button">Autores</a>
-                <a href="/publishers" class="button">Editoriales</a>
+                <?php
+                $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                $current_path = rtrim($current_path, '/') ?: '/';
+                
+                $nav_links = [
+                    '/' => 'Inicio',
+                    '/books' => 'Libros',
+                    '/authors' => 'Autores',
+                    '/publishers' => 'Editoriales'
+                ];
+                
+                foreach ($nav_links as $path => $label):
+                    $is_active = ($current_path === $path) ? 'active' : '';
+                ?>
+                    <a href="<?php echo $path; ?>" class="button <?php echo $is_active; ?>">
+                        <?php echo $label; ?>
+                    </a>
+                <?php endforeach; ?>
             </nav>
         </header>
 
