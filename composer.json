@@ -1,0 +1,16 @@
+{
+    "name": "hezro/tarea-php-libros",
+    "description": "hezro/tarea-php-libros",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Hezron"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
