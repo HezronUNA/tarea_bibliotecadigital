@@ -1,11 +1,21 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-RUN a2enmod rewrite
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+WORKDIR /var/www/html
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+COPY . .
 
-COPY . /var/www/html
+RUN chmod +x /var/www/html/start.sh && \
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html && \
+    chmod -R 775 /var/www/html/database /var/www/html/cache
 
-RUN chown -R www-data:www-data /var/www/html
+COPY nginx.conf /etc/nginx/sites-available/default
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log
+
+EXPOSE 8080
+
+CMD ["/var/www/html/start.sh"]
