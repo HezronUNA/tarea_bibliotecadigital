@@ -52,6 +52,16 @@ nav a.active {
     border-radius: 4px;
 }
 
+.card-clickable {
+    transition: all 0.3s ease;
+}
+
+.card-clickable:hover {
+    border-color: #33c3dd;
+    box-shadow: 0 2px 8px rgba(51, 195, 221, 0.2);
+    transform: translateY(-2px);
+}
+
 .card h3 {
     margin-top: 0;
     margin-bottom: 15px;
@@ -95,4 +105,111 @@ footer {
     padding: 20px;
     color: #999;
     font-size: 12px;
+}
+
+/* Form styles */
+.form-container {
+    background-color: #fafafa;
+    padding: 25px;
+    border-radius: 4px;
+    border: 1px solid #e1e1e1;
+}
+
+.form-container label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container select {
+    border-radius: 3px;
+    border-color: #ddd;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="number"]:focus,
+.form-container select:focus {
+    border-color: #33c3dd;
+    box-shadow: 0 0 0 2px rgba(51, 195, 221, 0.1);
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.button-group button,
+.button-group a {
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Button styles */
+button.button-primary {
+    background-color: #33c3dd;
+    border-color: #33c3dd;
+    color: #fff;
+}
+
+button.button-primary:hover {
+    background-color: #1ba1bd;
+    border-color: #1ba1bd;
+}
+
+a.button {
+    text-decoration: none;
+    padding: 10px 16px;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+a.button:hover {
+    opacity: 0.8;
+}
+
+.button-small {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+}
+
+/* Select styling */
+select {
+    appearance: none;
+    padding-right: 40px;
+    background: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center / 24px;
+    background-color: #fff;
+    padding-right: 40px;
+}
+
+/* Success state */
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
 }

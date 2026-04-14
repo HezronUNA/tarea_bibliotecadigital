@@ -38,7 +38,7 @@
         </div>
 
         <footer>
-            <p>&copy; 2024 Biblioteca Digital</p>
+            <p>&copy; 2026 Biblioteca Digital</p>
         </footer>
     </div>
 </body>

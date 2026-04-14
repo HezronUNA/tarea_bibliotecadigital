@@ -2,47 +2,74 @@
 
 namespace App\Controllers;
 
+use Database\Database;
+
 class PublishersController
 {
-    private $publishers = [
-        [
-            'id' => 1,
-            'publisher' => 'John Wiley & Sons',
-            'country' => 'United States',
-            'founded' => 1807,
-            'genre' => 'Academic',
-            'books' => [
-                ['book_id' => 1, 'title' => 'Operating System Concepts'],
-                ['book_id' => 2, 'title' => 'Database System Concepts'],
-            ]
-        ],
-        [
-            'id' => 2,
-            'publisher' => 'Pearson Education',
-            'country' => 'United Kingdom',
-            'founded' => 1844,
-            'genre' => 'Education',
-            'books' => [
-                ['book_id' => 3, 'title' => 'Computer Networks'],
-                ['book_id' => 4, 'title' => 'Modern Operating Systems'],
-            ]
-        ],
-    ];
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = Database::getInstance();
+    }
 
     public function index()
     {
-        $publishers = $this->publishers;
+        $publishers = $this->db->query("
+            SELECT * FROM publishers ORDER BY name
+        ");
+
+        // Para cada editorial, obtener sus libros
+        foreach ($publishers as &$publisher) {
+            $publisher['books'] = $this->db->query("
+                SELECT id as book_id, title FROM books WHERE publisher_id = ? ORDER BY title
+            ", [$publisher['id']]);
+        }
+
         return view('publishers.index', ['publishers' => $publishers]);
     }
 
-    public function show($id)
+    public function create()
     {
-        $publisher = collect($this->publishers)->firstWhere('id', (int)$id);
+        return view('publishers.create');
+    }
+
+    public function store()
+    {
+        $data = $_POST;
+        
+        $id = $this->db->insert(
+            "INSERT INTO publishers (name, country, founded, genre) VALUES (?, ?, ?, ?)",
+            [$data['name'], $data['country'], $data['founded'], $data['genre']]
+        );
+
+        header('Location: /publishers');
+        exit;
+    }
+
+    public function edit($id)
+    {
+        $publisher = $this->db->queryOne("SELECT * FROM publishers WHERE id = ?", [$id]);
         
         if (!$publisher) {
             return view('404');
         }
 
-        return view('publishers.show', ['publisher' => $publisher]);
+        return view('publishers.edit', ['publisher' => $publisher]);
+    }
+
+    public function update($id)
+    {
+        $data = $_POST;
+        
+        $this->db->update(
+            "UPDATE publishers SET name = ?, country = ?, founded = ?, genre = ? WHERE id = ?",
+            [$data['name'], $data['country'], $data['founded'], $data['genre'], $id]
+        );
+
+        header('Location: /publishers');
+        exit;
     }
 }
+?>
+

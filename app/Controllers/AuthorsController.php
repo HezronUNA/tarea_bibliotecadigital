@@ -2,47 +2,74 @@
 
 namespace App\Controllers;
 
+use Database\Database;
+
 class AuthorsController
 {
-    private $authors = [
-        [
-            'id' => 1,
-            'author' => 'Abraham Silberschatz',
-            'nationality' => 'Israeli / American',
-            'birth_year' => 1952,
-            'fields' => 'Database Systems, Operating Systems',
-            'books' => [
-                ['book_id' => 1, 'title' => 'Operating System Concepts'],
-                ['book_id' => 2, 'title' => 'Database System Concepts'],
-            ]
-        ],
-        [
-            'id' => 2,
-            'author' => 'Andrew S. Tanenbaum',
-            'nationality' => 'Dutch / American',
-            'birth_year' => 1944,
-            'fields' => 'Distributed computing, Operating Systems',
-            'books' => [
-                ['book_id' => 3, 'title' => 'Computer Networks'],
-                ['book_id' => 4, 'title' => 'Modern Operating Systems'],
-            ]
-        ],
-    ];
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = Database::getInstance();
+    }
 
     public function index()
     {
-        $authors = $this->authors;
+        $authors = $this->db->query("
+            SELECT * FROM authors ORDER BY name
+        ");
+
+        // Para cada autor, obtener sus libros
+        foreach ($authors as &$author) {
+            $author['books'] = $this->db->query("
+                SELECT id as book_id, title FROM books WHERE author_id = ? ORDER BY title
+            ", [$author['id']]);
+        }
+
         return view('authors.index', ['authors' => $authors]);
     }
 
-    public function show($id)
+    public function create()
     {
-        $author = collect($this->authors)->firstWhere('id', (int)$id);
+        return view('authors.create');
+    }
+
+    public function store()
+    {
+        $data = $_POST;
+        
+        $id = $this->db->insert(
+            "INSERT INTO authors (name, nationality, birth, fields) VALUES (?, ?, ?, ?)",
+            [$data['name'], $data['nationality'], $data['birth'], $data['fields']]
+        );
+
+        header('Location: /authors');
+        exit;
+    }
+
+    public function edit($id)
+    {
+        $author = $this->db->queryOne("SELECT * FROM authors WHERE id = ?", [$id]);
         
         if (!$author) {
             return view('404');
         }
 
-        return view('authors.show', ['author' => $author]);
+        return view('authors.edit', ['author' => $author]);
+    }
+
+    public function update($id)
+    {
+        $data = $_POST;
+        
+        $this->db->update(
+            "UPDATE authors SET name = ?, nationality = ?, birth = ?, fields = ? WHERE id = ?",
+            [$data['name'], $data['nationality'], $data['birth'], $data['fields'], $id]
+        );
+
+        header('Location: /authors');
+        exit;
     }
 }
+?>
+
