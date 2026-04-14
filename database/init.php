@@ -90,4 +90,4 @@ $db->insert(
 );
 
 echo "✅ ¡Base de datos SQLite creada exitosamente!";
-?>
+
