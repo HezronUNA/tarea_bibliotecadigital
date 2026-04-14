@@ -6,7 +6,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN chmod +x /var/www/html/start.sh && \
+RUN mkdir -p /var/www/html/database /var/www/html/cache && \
+    chmod +x /var/www/html/start.sh && \
     chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html && \
     chmod -R 775 /var/www/html/database /var/www/html/cache
